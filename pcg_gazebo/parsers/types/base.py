@@ -389,7 +389,7 @@ class XMLBase(object):
                                             'input={}'.format(
                                                 elem, obj._NAME, value[elem])
                                         PCG_ROOT_LOGGER.error(msg)
-                                        return
+                                        continue
                                     if 'n_elems' in \
                                             obj._CHILDREN_CREATORS[elem]:
                                         if obj._CHILDREN_CREATORS[elem][

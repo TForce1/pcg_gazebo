@@ -35,6 +35,8 @@ class Gravity(XMLBase):
 
     def _set_value(self, value):
         if isinstance(self._default, bool):
+            if isinstance(value, collections.Iterable):
+                value = value[0]
             assert isinstance(value, bool) or value in [0, 1], \
                 'Boolean value must be a boolean, 0 or 1'
             self._value = bool(value)

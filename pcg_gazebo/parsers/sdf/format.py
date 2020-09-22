@@ -21,12 +21,13 @@ class Format(XMLString):
     _TYPE = 'sdf'
 
     _VALUE_OPTIONS = ['L8', 'R8G8B8', 'B8G8R8', 'BAYER_RGGB8',
-                      'BAYER_BGGR8', 'BAYER_GBRG8', 'BAYER_GRBG8']
+                      'BAYER_BGGR8', 'BAYER_GBRG8', 'BAYER_GRBG8',
+                      'RGB_INT8', 'L_INT8']
 
     def __init__(self, default='R8G8B8'):
         super(Format, self).__init__(default)
 
     def _set_value(self, value):
-        assert value in self._VALUE_OPTIONS, 'Options are {}'.format(
-            self._VALUE_OPTIONS)
+        assert value in self._VALUE_OPTIONS, 'Bad value: {}. Options are {}'.format(
+            value, self._VALUE_OPTIONS)
         XMLString._set_value(self, value)
