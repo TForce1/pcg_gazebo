@@ -17,8 +17,8 @@ from copy import deepcopy
 import collections
 import numpy as np
 import sys
-from lxml import etree
-from lxml.etree import Element, SubElement
+from xml.etree import ElementTree as etree
+from xml.etree.ElementTree import Element, SubElement
 from ...log import PCG_ROOT_LOGGER
 from ...utils import is_scalar, is_boolean, is_array, \
     is_string, is_integer
@@ -842,7 +842,7 @@ class XMLBase(object):
 
     def to_xml_as_str(self, pretty_print=False, version='1.6'):
         elem = self.to_xml(version=version)
-        return etree.tostring(elem, pretty_print=pretty_print).decode('utf-8')
+        return etree.tostring(elem).decode('utf-8')
 
     def export_xml(self, filename, version='1.6'):
         xml_root = self.to_xml(version=version)
@@ -852,7 +852,7 @@ class XMLBase(object):
             else:
                 output_xml.write('<?xml version="1.0" ?>\n')
             output_xml.write(
-                etree.tostring(xml_root, pretty_print=True,
+                etree.tostring(xml_root,
                                encoding='utf-8').decode('utf-8'))
 
     def to_urdf(self):

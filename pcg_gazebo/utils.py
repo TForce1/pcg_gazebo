@@ -226,10 +226,10 @@ def _find_relative_path(name, root_dir='.'):
 
 
 def _pretty_print_xml(xml):
-    import lxml.etree as etree
+    import xml.etree.ElementTree as etree
     parser = etree.XMLParser(remove_blank_text=True)
     root = etree.fromstring(xml, parser=parser)
-    return etree.tostring(root, pretty_print=True).decode()
+    return etree.tostring(root).decode()
 
 
 def _parse_package_paths(xml):

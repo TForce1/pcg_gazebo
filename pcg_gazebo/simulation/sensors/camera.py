@@ -14,8 +14,8 @@
 # limitations under the License.
 
 from .sensor import Sensor
-from ..properties import Plugin, Noise
-from ...parsers.sdf import create_sdf_element, Format
+from ..properties import Plugin, Noise, Image
+from ...parsers.sdf import create_sdf_element
 
 
 class Camera(Sensor):
@@ -67,11 +67,10 @@ class Camera(Sensor):
         self._horizontal_fov = horizontal_fov
 
         # Set image configuration
-        assert image_format in Format._VALUE_OPTIONS, 'Invalid' \
-            ' image format, options={}'.format(Format._VALUE_OPTIONS)
-        self._image_format = image_format
-        self._image_width = image_width
-        self._image_height = image_height
+        self._image = Image(
+                image_width, 
+                image_height, 
+                image_format)
 
         # Set distortion parameters
         assert distortion_k1 >= 0, 'Radial ' \
@@ -141,6 +140,20 @@ class Camera(Sensor):
                 'Invalid noise input, received={}'.format(str(values)))
 
     @property
+    def image(self):
+        return self._image
+
+    @image.setter
+    def image(self, values):
+        if isinstance(values, dict):
+            self._image = Image(**values)
+        elif isinstance(values, Image):
+            self._image = values
+        else:
+            raise ValueError(
+                'Invalid image input, received={}'.format(str(values)))
+
+    @property
     def horizontal_fov(self):
         return self._horizontal_fov
 
@@ -148,36 +161,6 @@ class Camera(Sensor):
     def horizontal_fov(self, value):
         assert value > 0, 'Horizontal FOV must be greater than zero'
         self._horizontal_fov = value
-
-    @property
-    def image_format(self):
-        return self._image_format
-
-    @image_format.setter
-    def image_format(self, value):
-        assert value in Format._VALUE_OPTIONS, 'Invalid image format, ' \
-            'options={}'.format(Format._VALUE_OPTIONS)
-        self._image_format = value
-
-    @property
-    def image_width(self):
-        return self._image_width
-
-    @image_width.setter
-    def image_width(self, value):
-        assert isinstance(value, int), 'Image width must be an integer'
-        assert value > 0, 'Image width must be greater than zero'
-        self._image_width = value
-
-    @property
-    def image_height(self):
-        return self._image_height
-
-    @image_height.setter
-    def image_height(self, value):
-        assert isinstance(value, int), 'Image height must be an integer'
-        assert value > 0, 'Image height must be greater than zero'
-        self._image_height = value
 
     @property
     def distortion_k1(self):
@@ -317,10 +300,7 @@ class Camera(Sensor):
         sensor.camera.reset(with_optional_elements=True)
         sensor.camera.name = self._camera_name
         sensor.camera.noise = self._noise.to_sdf()
-
-        sensor.camera.image.format = self._image_format
-        sensor.camera.image.width = self._image_width
-        sensor.camera.image.height = self._image_height
+        sensor.camera.image = self._image.to_sdf()
 
         sensor.camera.clip.near = self._clip_near
         sensor.camera.clip.far = self._clip_far
@@ -347,10 +327,10 @@ class Camera(Sensor):
         if sdf.camera.noise is not None:
             sensor.noise = Noise.from_sdf(sdf.camera.noise)
 
-        tags = ['format', 'width', 'height']
-        for tag in tags:
-            if hasattr(sdf.camera.image, tag):
-                setattr(sensor, tag, getattr(sdf.camera.image, tag).value)
+        if sdf.camera.image is not None:
+            sensor.image = Image.from_sdf(sdf.camera.image)
+
+        #Todo: set position, update_rate, and more!
 
         if hasattr(sdf.camera, 'distortion'):
             tags = ['k1', 'k2', 'k3', 'p1', 'p2']

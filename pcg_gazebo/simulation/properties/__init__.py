@@ -25,6 +25,7 @@ from .visual import Visual
 from .material import Material
 from .mesh import Mesh
 from .noise import Noise
+from .image import Image
 from .plugin import Plugin
 from .pose import Pose
 from .script import Script
@@ -46,6 +47,7 @@ __all__ = [
     'Material',
     'Mesh',
     'Noise',
+    'Image',
     'Plugin',
     'Pose',
     'Script',

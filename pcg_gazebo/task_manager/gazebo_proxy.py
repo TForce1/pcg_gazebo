@@ -122,8 +122,18 @@ class GazeboProxy(object):
         self._sim_time = rospy.Time(msg.clock.secs, msg.clock.nsecs).to_sec()
 
     def init(self):
-        if self.is_init():
-            return True
+        if not self.is_init():
+            # init ros node
+            try:
+                self._sim_time_sub = rospy.Subscriber(
+                    'clock', Clock, self._clock_callback)
+            except Exception as ex:
+                self._logger.warning('Could not subscribe to Gazebo clock, '
+                                     'message={}'.format(ex))
+                return False
+            rospy.init_node('gazebo_proxy', anonymous=True)
+
+        # init gazebo services
         try:
             self._services = dict()
             for name, srv_class in self._GAZEBO_SERVICES.items():
@@ -140,15 +150,9 @@ class GazeboProxy(object):
                                  'message={}'.format(ex))
             return False
 
-        try:
-            self._sim_time_sub = rospy.Subscriber(
-                'clock', Clock, self._clock_callback)
-
-            rospy.init_node('gazebo_proxy', anonymous=True)
-            return True
-        except Exception as ex:
-            self._logger.warning('Could not subscribe to Gazebo clock, '
-                                 'message={}'.format(ex))
+        if not self.is_gazebo_services_init():
+            return False
+            
         return True
 
     def is_init(self):
@@ -157,9 +161,9 @@ class GazeboProxy(object):
             is_roscore_running(self._ros_config.ros_master_uri) and \
             is_gazebo_running(self._ros_config.ros_master_uri)
 
-        if not instances_running:
-            return False
+        return instances_running
 
+    def is_gazebo_services_init(self):
         for name in self._GAZEBO_SERVICES:
             if name not in self._services:
                 return False
