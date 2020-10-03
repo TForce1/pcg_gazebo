@@ -392,6 +392,10 @@ class Link(Entity):
                 return True
         return False
 
+    @property
+    def sensors(self):
+        return self._sensors
+
     def enable_collision(self):
         """Enable the inclusion of the collision models
         in the exported SDF description.

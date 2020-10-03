@@ -318,9 +318,15 @@ class Camera(Sensor):
     def from_sdf(sdf):
         sensor = Camera(name=sdf.name, type=sdf.type)
 
+        if hasattr(sdf, 'pose') and sdf.pose:
+            sensor.pose = sdf.pose.value
+
+        if hasattr(sdf, 'update_rate') and sdf.update_rate:
+            sensor.update_rate = sdf.update_rate.value
+
         assert hasattr(sdf, 'camera'), 'No camera block available'
-        assert hasattr(
-            sdf.camera, 'image'), 'Camera has no image properties information'
+        assert hasattr(sdf.camera, 
+                       'image'), 'Camera has no image properties information'
 
         sensor.camera_name = sdf.camera.name
 
