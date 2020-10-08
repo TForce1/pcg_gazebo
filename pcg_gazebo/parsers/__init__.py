@@ -260,7 +260,8 @@ def convert_to_dict(xml_dict):
                     output[tag].append(convert_to_dict(subelem_dict[tag]))
                 else:
                     output[tag].append(convert_from_string(subelem_dict[tag]))
-        elif isinstance(xml_dict[tag], dict):
+        elif isinstance(xml_dict[tag], dict) or \
+                isinstance(xml_dict[tag], collections.OrderedDict):
             output[tag] = convert_to_dict(xml_dict[tag])
         else:
             output[tag] = dict(value=convert_from_string(xml_dict[tag]))
