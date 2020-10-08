@@ -17,8 +17,8 @@ from copy import deepcopy
 import collections
 import numpy as np
 import sys
-from xml.etree import ElementTree as etree
-from xml.etree.ElementTree import Element, SubElement
+from lxml import etree
+from lxml.etree import Element, SubElement
 from ...log import PCG_ROOT_LOGGER
 from ...utils import is_scalar, is_boolean, is_array, \
     is_string, is_integer
@@ -261,6 +261,7 @@ class XMLBase(object):
             ' cannot be None'.format(
                 tag, self._NAME)
 
+        # if self.has_value() and tag not in self._CHILDREN_CREATORS:
         if self.has_value():
             if issubclass(value.__class__, XMLBase):
                 assert value.has_value(), \
@@ -373,6 +374,7 @@ class XMLBase(object):
                                     ' input={}'.format(
                                         elem, tag, value[elem]))
                                 continue
+
                     for elem in value:
                         if elem == 'attributes':
                             for att in value[elem]:
@@ -825,10 +827,9 @@ class XMLBase(object):
             elif tag == 'attributes':
                 for att in sdf_data[tag]:
                     if not hasattr(self, att):
-                        print(
-                            'WARNING: Attribute {} does'
-                            ' not exist for {}'.format(
-                                att, self._NAME))
+                        self.log_warning('Attribute {} does'
+                                         ' not exist for {}'.format(
+                                         att, self._NAME))
                     else:
                         setattr(self, att, sdf_data[tag][att])
             else:
@@ -842,7 +843,7 @@ class XMLBase(object):
 
     def to_xml_as_str(self, pretty_print=False, version='1.6'):
         elem = self.to_xml(version=version)
-        return etree.tostring(elem).decode('utf-8')
+        return etree.tostring(elem, pretty_print=pretty_print).decode('utf-8')
 
     def export_xml(self, filename, version='1.6'):
         xml_root = self.to_xml(version=version)
@@ -852,7 +853,7 @@ class XMLBase(object):
             else:
                 output_xml.write('<?xml version="1.0" ?>\n')
             output_xml.write(
-                etree.tostring(xml_root,
+                etree.tostring(xml_root, pretty_print=True,
                                encoding='utf-8').decode('utf-8'))
 
     def to_urdf(self):

@@ -367,7 +367,7 @@ class Link(XMLBase):
         if self.sensors is not None:
             for elem in self.sensors:
                 if elem.name == name:
-                    print(
+                    self.log_warning(
                         'Sensor element with name {}'
                         ' already exists'.format(name))
                     return
@@ -393,7 +393,7 @@ class Link(XMLBase):
         if self.plugins is not None:
             for elem in self.plugins:
                 if elem.name == name:
-                    print(
+                    self.log_warning(
                         'Plugin element with name {}'
                         ' already exists'.format(name))
                     return
@@ -419,7 +419,7 @@ class Link(XMLBase):
         if self.lights is not None:
             for elem in self.lights:
                 if elem.name == name:
-                    print(
+                    self.log_warning(
                         'Light element with name {}'
                         ' already exists'.format(name))
                     return
@@ -445,7 +445,7 @@ class Link(XMLBase):
         if self.frames is not None:
             for elem in self.frames:
                 if elem.name == name:
-                    print(
+                    self.log_warning(
                         'Frame element with name {}'
                         ' already exists'.format(name))
                     return
@@ -458,12 +458,12 @@ class Link(XMLBase):
 
     def is_valid(self):
         if len(self.attributes) != 1:
-            print('Link should have at least one attribute')
+            self.log_warning('Link should have at least one attribute')
             return False
         if 'name' not in self.attributes:
-            print('Link should have an attribute <name>')
+            self.log_warning('Link should have an attribute <name>')
             return False
         if len(self.attributes['name']) == 0:
-            print('Link name attribute is empty')
+            self.log_warning('Link name attribute is empty')
             return False
         return XMLBase.is_valid(self)

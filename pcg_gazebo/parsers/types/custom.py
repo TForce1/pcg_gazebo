@@ -14,8 +14,7 @@
 # limitations under the License.
 
 from . import XMLBase
-#from lxml.etree import Element, SubElement
-from xml.etree.ElementTree import Element, SubElement
+from lxml.etree import Element, SubElement
 
 
 class XMLCustom(XMLBase):
