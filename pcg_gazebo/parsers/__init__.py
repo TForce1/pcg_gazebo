@@ -210,7 +210,8 @@ def convert_custom(xml_dict):
                     output['value'] = dict()
                 output['value'] = convert_from_string(xml_dict[tag])
             elif isinstance(xml_dict[tag], dict) or \
-                    isinstance(xml_dict[tag], collections.OrderedDict):
+                    isinstance(xml_dict[tag], collections.OrderedDict) or \
+                    isinstance(xml_dict[tag], list):
                 output[tag] = convert_custom(xml_dict[tag])
             else:
                 output[tag] = convert_from_string(xml_dict[tag])
