@@ -43,9 +43,9 @@ class Sensor(XMLBase):
         camera=dict(creator=Camera, optional=True, mode='camera'),
         force_torque=dict(
             creator=ForceTorque, optional=True, mode='force_torque'),
-        contact=dict(creator=Contact, default=['sensor'], mode='contact'),
-        ray=dict(creator=Ray, mode='ray'),
-        imu=dict(creator=IMU, mode='imu')
+        contact=dict(creator=Contact, default=['sensor'], mode='contact', optional=True),
+        ray=dict(creator=Ray, mode='ray', optional=True),
+        imu=dict(creator=IMU, mode='imu', optional=True)
     )
 
     _ATTRIBUTES = dict(

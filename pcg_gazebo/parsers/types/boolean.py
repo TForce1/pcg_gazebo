@@ -29,7 +29,9 @@ class XMLBoolean(XMLBase):
     def _set_value(self, value):
         if value in [0, 1]:
             value = bool(value)
-        if value in ['true', 'false']:
+        elif value in ['0', '1']:
+            value = True if value == '1' else False
+        elif value in ['true', 'false']:
             value = True if value == 'true' else False
         assert isinstance(value, bool), \
             '[{}] Input value must be a boolean, 0' \

@@ -30,6 +30,7 @@ from .velocity import Velocity
 from .acceleration import Acceleration
 from .wrench import Wrench
 from .frame import Frame
+from .velocity_decay import velocity_decay
 
 
 class Link(XMLBase):
@@ -101,6 +102,9 @@ class Link(XMLBase):
             default=[[0, 0, 0, 0, 0, 0]],
             optional=True,
             mode='state'),
+        velocity_decay=dict(
+            creator=velocity_decay, 
+            optional=True),
         acceleration=dict(
             creator=Acceleration,
             default=[[0, 0, 0, 0, 0, 0]],
@@ -261,6 +265,14 @@ class Link(XMLBase):
         if self._mode != 'state':
             self._mode = 'state'
         self._add_child_element('velocity', value)
+
+    @property
+    def velocity_decay(self):
+        return self._get_child_element('velocity_decay')
+
+    @velocity_decay.setter
+    def velocity_decay(self, value):
+        self._add_child_element('velocity_decay', value)
 
     @property
     def acceleration(self):

@@ -33,6 +33,7 @@ from .erp import ERP
 from .limit import Limit
 from .slip import Slip
 from .cfm_damping import CFMDamping
+from .implicit_spring_damper import implicit_spring_damper
 
 
 class ODE(XMLBase):
@@ -68,7 +69,8 @@ class ODE(XMLBase):
             creator=Limit, default=['joint'], mode='joint', optional=True),
         slip=dict(creator=Slip, default=[0], mode='torsional', optional=True),
         cfm_damping=dict(
-            creator=CFMDamping, default=[False], optional=True, mode='joint')
+            creator=CFMDamping, default=[False], optional=True, mode='joint'),
+        implicit_spring_damper=dict(creator=implicit_spring_damper, optional=True)
     )
 
     _MODES = ['physics', 'collision', 'contact', 'joint', 'torsional']

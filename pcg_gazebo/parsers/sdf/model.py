@@ -25,6 +25,7 @@ from .joint import Joint
 from .plugin import Plugin
 from .urdf import URDF
 from .scale import Scale
+from .velocity_decay import velocity_decay
 
 
 class Model(XMLBase):
@@ -56,7 +57,8 @@ class Model(XMLBase):
         model=dict(
             creator=None, n_elems='+', default=['model'], optional=True),
         urdf=dict(
-            creator=URDF, default=['model'], optional=True, mode='model')
+            creator=URDF, default=['model'], optional=True, mode='model'),
+        velocity_decay=dict(creator=velocity_decay, optional=True)
     )
 
     _MODES = ['state', 'model']
@@ -142,6 +144,14 @@ class Model(XMLBase):
         self._add_child_element('urdf', value)
 
     @property
+    def velocity_decay(self):
+        return self._get_child_element('velocity_decay')
+
+    @velocity_decay.setter
+    def velocity_decay(self, value):
+        self._add_child_element('velocity_decay', value)
+
+    @property
     def links(self):
         return self._get_child_element('link')
 
@@ -185,7 +195,7 @@ class Model(XMLBase):
             for elem in self.links:
                 if elem.name == name:
                     return elem
-        return None
+        return None 
 
     def remove_link_by_name(self, name):
         if self.links is None:
