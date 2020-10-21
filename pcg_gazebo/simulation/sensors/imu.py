@@ -151,6 +151,15 @@ class IMU(Sensor):
     def from_sdf(sdf):
         sensor = IMU(name=sdf.name)
 
+        if hasattr(sdf, 'pose') and sdf.pose:
+            sensor.pose = sdf.pose.value
+
+        if hasattr(sdf, 'update_rate') and sdf.update_rate:
+            sensor.update_rate = sdf.update_rate.value
+
+        if hasattr(sdf, 'visualize') and sdf.visualize:
+            sensor.visualize = sdf.visualize.value
+
         for element in ['angular_velocity', 'linear_acceleration']:
             for component in ['x', 'y', 'z']:
                 if hasattr(sdf.imu, element):

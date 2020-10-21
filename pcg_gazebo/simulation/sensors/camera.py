@@ -26,7 +26,7 @@ class Camera(Sensor):
             camera_name='camera',
             always_on=True,
             update_rate=50,
-            visualize=True,
+            visualize=False,
             topic='camera',
             pose=[0, 0, 0, 0, 0, 0],
             noise_type='gaussian',
@@ -323,6 +323,9 @@ class Camera(Sensor):
 
         if hasattr(sdf, 'update_rate') and sdf.update_rate:
             sensor.update_rate = sdf.update_rate.value
+
+        if hasattr(sdf, 'visualize') and sdf.visualize:
+            sensor.visualize = sdf.visualize.value
 
         assert hasattr(sdf, 'camera'), 'No camera block available'
         assert hasattr(sdf.camera, 
