@@ -15,6 +15,18 @@
 
 from ..types import XMLBase
 from ...utils import is_string
+from .type import Type
+from .offset import offset
+from .p_gain import p_gain
+from .i_gain import i_gain
+from .d_gain import d_gain
+from .i_max import i_max
+from .i_min import i_min
+from .cmd_max import cmd_max
+from .cmd_min import cmd_min
+from .joint_name import joint_name
+from .multiplier import multiplier
+from .controlVelocitySlowdownSim import controlVelocitySlowdownSim
 
 
 class Control(XMLBase):
@@ -25,11 +37,26 @@ class Control(XMLBase):
         channel='',
     )
 
+    _CHILDREN_CREATORS = dict(
+        type=dict(creator=Type, optional=True),
+        offset=dict(creator=offset, optional=True),
+        p_gain=dict(creator=p_gain, optional=True),
+        i_gain=dict(creator=i_gain, optional=True),
+        d_gain=dict(creator=d_gain, optional=True),
+        i_max=dict(creator=i_max, optional=True),
+        i_min=dict(creator=i_min, optional=True),
+        cmd_max=dict(creator=cmd_max, optional=True),
+        cmd_min=dict(creator=cmd_min, optional=True),
+        jointName=dict(creator=joint_name, optional=True),
+        multiplier=dict(creator=multiplier, optional=True),
+        controlVelocitySlowdownSim=dict(creator=controlVelocitySlowdownSim,
+                                        optional=True),
+    )
+
     def __init__(self):
         super(Control, self).__init__()
         self.reset()
-        self._value = dict()
-        # self._value = None
+        self._value = None
         self._has_custom_elements = True
 
     @property

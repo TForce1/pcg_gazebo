@@ -225,6 +225,6 @@ class Plugin(object):
         plugin = Plugin()
         plugin.name = sdf.name
         plugin.filename = sdf.filename
-        for tag in sdf._value:
-            plugin._params[tag] = sdf._value[tag]
+        for tag in sdf.children:
+            plugin._params[tag] = sdf.children[tag]
         return plugin

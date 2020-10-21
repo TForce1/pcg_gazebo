@@ -232,7 +232,7 @@ def convert_to_dict(xml_dict):
     `dict`: Formatted XML dictionary.
     """
     import collections
-    custom_elements = ['plugin']
+    custom_elements = []
 
     tags = list(xml_dict.keys())
 

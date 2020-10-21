@@ -200,7 +200,11 @@ class XMLBase(object):
         return is_integer(value)
 
     def _set_value(self, value):
-        raise NotImplementedError()
+        assert isinstance(
+            value, dict), 'Input value must be a dict,' \
+                          ' type={}, input={}'.format(
+            self._NAME, value)
+        self._value = value
 
     def _reset_counter(self, tag):
         self._n_mult_child_counter[tag] = 0
@@ -604,9 +608,8 @@ class XMLBase(object):
         return is_valid
 
     def get_formatted_value_as_str(self):
-        raise NotImplementedError(
-            '[{}] has not implemented this method'.format(
-                self.xml_element_name))
+        assert self.is_valid(), 'Invalid scalar value'
+        return '{}'.format(self._value)
 
     def has_value(self):
         return self._value is not None
@@ -729,6 +732,10 @@ class XMLBase(object):
             base = Element(self._NAME, attrib=att)
         else:
             base = SubElement(root, self._NAME, attrib=att)
+
+        if self._NAME == "plugin":
+            self.children = self._value
+            self._value = None
 
         if self.has_value():
             base.text = self.get_formatted_value_as_str()
