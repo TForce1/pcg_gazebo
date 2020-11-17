@@ -383,8 +383,13 @@ class XMLBase(object):
                         if elem == 'attributes':
                             for att in value[elem]:
                                 setattr(obj, att, value[elem][att])
-                        elif obj.has_value() and elem == 'value':
-                            setattr(obj, 'value', value[elem])
+                        elif elem == 'value':
+                            if value[elem] == "":
+                                # Self closing tag (<tag/>)
+                                continue
+
+                            elif obj.has_value(): 
+                                setattr(obj, 'value', value[elem])
                         else:
                             if obj._NAME != 'empty':
                                 has_mult = False
